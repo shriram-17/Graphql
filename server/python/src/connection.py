@@ -4,16 +4,13 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import  Session, relationship
 from sqlalchemy.ext.declarative import declarative_base
+from dotenv import load_dotenv
 
+load_dotenv()
 
+DB_URL = os.getenv("DATABASE_URL")
 
-DATABASE_URL = os.environ.get("DATABASE_URL")
-
-if DATABASE_URL is None:
-        DATABASE_URL="postgresql://postgres:postgres@localhost:5432/postgres"
-        print("The database url is", DATABASE_URL)
-
-engine = create_engine(DATABASE_URL)
+engine = create_engine(DB_URL)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

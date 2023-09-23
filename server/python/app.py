@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Depends
+from fastapi.middleware.cors import CORSMiddleware 
 from pydantic import BaseModel
 from sqlalchemy.future import select
 from typing import List
@@ -8,7 +9,17 @@ from src.connection import engine,SessionLocal,Author,Book
 import strawberry;
 
 app = FastAPI();
+origins = [
+    "http://localhost:5173", 
+]
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 class AuthorPayload(BaseModel):
     name : str 
     
@@ -109,7 +120,6 @@ async def get_author_books_by_id(book_id: int):
         }
         return book
     except Exception as e:
-            print(e);
             raise HTTPException(status_code=500, detail='Internal server error')
     finally:
         db.close()        
