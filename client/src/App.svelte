@@ -1,10 +1,10 @@
 <script>
-  import Fetch from "./lib/fetch.svelte";
-import Navbar from "./lib/navbar.svelte";
-
+  import Books from "./lib/books.svelte";
+  import Navbar from "./lib/navbar.svelte";
+  
 </script>
 
 <main>
   <Navbar/>
-  <Fetch/>
+  <Books/>
 </main>

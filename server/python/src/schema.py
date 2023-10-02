@@ -11,7 +11,8 @@ class AuthorType:
 class BookType:
     bid: int
     title: str
-    Author:List[AuthorType]
+    Author:AuthorType
+    
 @strawberry.type
 class AuthorWithBooks:
     author : AuthorType    
@@ -51,15 +52,15 @@ class Query:
             
             for book in books:
                 author = author_mapping.get(book.author_id)  
-                book_type = BookType(bid=book.bid, title=book.title, Author=[author] if author else [])
+                book_type = BookType(bid=book.bid, title=book.title, Author=author if author else None)
                 book_list.append(book_type)
             
             return book_list
         except Exception as e:
             raise HTTPException(status_code=500, detail='Internal server error')
         finally:
-            db.close()
-            
+            db.close()        
+                
     @strawberry.field
     async def get_author_with_books(self, author_id: int) -> AuthorWithBooks:
         db = SessionLocal()
@@ -82,11 +83,9 @@ class Query:
         db = SessionLocal()
         try:
             book = db.query(Book).filter(Book.bid == book_id).first()
-            print(book)
             if not book:    
                 return BookWithAuthor(bid=None,title=None,author=None)
             author = db.query(Author).filter(Author.id == book.author_id).first()
-            print(author)
             return BookWithAuthor(bid=book.bid,title=book.title,author = author) 
         except Exception as e:
             raise HTTPException(status_code=500, detail='Internal server error')
