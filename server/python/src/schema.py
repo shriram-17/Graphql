@@ -113,7 +113,7 @@ class Mutation:
     async def create_book(self, title: str, author_id: int) -> BookType:
         db = SessionLocal()
         try:
-            author = db.query(Author).filter(Author.id == author_id).first()
+            author = db.query(Author).filter(Author.id== author_id).first()
             if not author:
                 raise HTTPException(status_code=404, detail=f'Author with id {author_id} not found')
                 
@@ -121,7 +121,6 @@ class Mutation:
             db.add(new_book)
             db.commit()
             db.refresh(new_book)
-            
             author_type = AuthorType(id=author.id, name=author.name)
             return BookType(bid=new_book.bid, title=new_book.title, Author=author_type)
         except HTTPException as e:
@@ -129,6 +128,25 @@ class Mutation:
         except Exception as e:
             db.rollback()
             raise HTTPException(status_code=500, detail='Failed to create book')
+        finally:
+            db.close()
+            
+    @strawberry.mutation
+    async def create_author_name(self,author_name:str,book_name:str) -> BookType:
+        db = SessionLocal()
+        try:
+            author = Author(name=author_name)                 
+            db.add(author)
+            db.commit()
+            db.refresh(author)
+            new_book = Book(title=book_name, author_id=author.id)
+            db.add(new_book)
+            db.commit()   
+            author_type = AuthorType(id=author.id, name=author.name)
+            return BookType(bid=new_book.bid, title=new_book.title, Author=author_type)
+        except Exception as e:
+            db.rollback()
+            raise HTTPException(status_code=500,detail="Failed to create Author")
         finally:
             db.close()
             
