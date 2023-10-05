@@ -1,10 +1,8 @@
 <script>
-  import Books from "./lib/books.svelte";
-  import Navbar from "./lib/navbar.svelte";
-  
+  import Router from "svelte-spa-router";
+  import { routes } from "../src/router"
 </script>
 
 <main>
-  <Navbar/>
-  <Books/>
+  <Router {routes}/>
 </main>

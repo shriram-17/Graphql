@@ -2,12 +2,13 @@
   import { onMount } from "svelte";
   import {queryStore, setContextClient } from "@urql/svelte";
   import { Client, cacheExchange, fetchExchange, getContextClient, gql } from "@urql/svelte";
+  import Navbar from "./navbar.svelte";
 
   const client = new Client({
     url: "http://localhost:8000/graphql",
     exchanges: [cacheExchange, fetchExchange],
   });
-
+  
   setContextClient(client);
 
   const booksQuery = queryStore({
@@ -66,6 +67,7 @@
 </style>
 
 <main>
+  <Navbar/>
   {#if $booksQuery.fetching}
     <p class="loading">Loading...</p>
   {:else if $booksQuery.error}

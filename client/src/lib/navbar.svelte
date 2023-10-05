@@ -13,8 +13,9 @@
       </div>
       <div class="navbar-links">
         <a href="/">Home</a>
-        <a href="/search">Search</a>
-        <a href="/book">Books</a>
+        <a href="/#/search">Search</a>
+        <a href="/#/book">Books</a>
+        <a href="/#/insert">Insert</a>
       </div>
       <div class="menu-icon" on:click={toggleMenu}>
         <div class="bar"></div>

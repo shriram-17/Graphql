@@ -5,6 +5,7 @@ from src.books import router as book_router
 from src.author import router as author_router
 from strawberry.asgi import GraphQL;
 from src.schema import Query as StrawberryQuery;
+from src.schema import Mutation as StrawberryMutation;
 import strawberry;
 
 app = FastAPI();
@@ -30,7 +31,7 @@ async def get_helloworld():
 app.include_router(author_router, prefix="/author", tags=["author"])
 
 app.include_router(book_router, prefix="/book", tags=["book"])
-                
-strawberry_app = GraphQL(schema=strawberry.Schema(query=StrawberryQuery), debug=True)
+                    
+strawberry_app = GraphQL(schema=strawberry.Schema(query=StrawberryQuery,mutation=StrawberryMutation), debug=True)
 
 app.add_route("/graphql", strawberry_app)
