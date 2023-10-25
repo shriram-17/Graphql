@@ -68,7 +68,6 @@ class Query:
             author = db.query(Author).filter(Author.id == author_id).first()
             if not author:    
                 return AuthorWithBooks(author=None, books=[])
-              
             books = db.query(Book).filter(Book.author_id == author_id).all()
             author_type = AuthorType(id=author.id, name=author.name)
             book_list = [BookType(bid=book.bid, title=book.title, Author=[author_type]) for book in books]
