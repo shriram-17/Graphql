@@ -6,7 +6,7 @@ export const AuthorSchema = z.object({
 
 export const BookSchema = z.object({
     title : z.string().min(6),
-    author_id : z.number()
+    authorId : z.number()
 });
 
 export type AuthorType = z.infer<typeof AuthorSchema>

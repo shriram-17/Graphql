@@ -1,3 +1,25 @@
+
+type Author {
+    id : ID!
+    name : String!
+}
+
+type Book {
+    bid : ID!
+    title : String!
+    author : Author!
+}
+
+type AuthorWithBooks {
+    author : Author
+    books : [Book]!
+}
+
 type Query {
     hello: String
+    authors : [Author!]
+    books :   [Book!]
+    authorWithBooks : AuthorWithBooks!
 }
+
+
