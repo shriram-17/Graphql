@@ -2,6 +2,7 @@
 type Author {
     id : ID!
     name : String!
+    books: [Book]!
 }
 
 type Book {
@@ -10,16 +11,13 @@ type Book {
     author : Author!
 }
 
-type AuthorWithBooks {
-    author : Author
-    books : [Book]!
-}
 
 type Query {
     hello: String
     authors : [Author!]
     books :   [Book!]
-    authorWithBooks : AuthorWithBooks!
+    getAuthorWithBooks(id: Int!) : Author!
+    getBooksWithAuthor(bid:Int!) : Book!  
 }
 
 

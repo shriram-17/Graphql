@@ -1,13 +1,21 @@
 import { AppDataSource } from "./data-source";
 import { Author } from "./entity/author";
 import { Book } from "./entity/book";
+import { GetAuthorWithBooksArgs } from './types';
 
 export const resolvers = {
   Query: {
     hello: () => 'Hello, world!',
     authors: async () => {
       try {
-        const authors = await AppDataSource.getRepository(Author).find();
+        const authors = await AppDataSource.getRepository(Author).find(
+          {
+            relations:{
+              books:true
+            }
+          }
+        );
+        console.log(authors)
         return authors;
       } catch (error) {
         console.error("Error fetching authors:", error);
@@ -27,24 +35,41 @@ export const resolvers = {
         throw new Error("Failed to fetch books");
       }
     },
-    authorWithBooks: async () => {
+    getAuthorWithBooks: async (_ : unknown , { id }: { id : number} ) : Promise<Author | string> => {
       try {
-        const authors = await AppDataSource.getRepository(Author).find({
+        
+        console.log("Received id:", id);
+        const authorWithBooks = await AppDataSource.getRepository(Author).find({
+          where: {
+            id: id,
+          },
           relations: {
-            books: true
-          }
+            books: true,
+          },
         });
-  
-        const authorWithBooks = authors.map(author => ({
-          author: { id: author.id, name: author.name },
-          books: author.books 
-        }));
-  
-        return authorWithBooks;
+        
+        return authorWithBooks[0];
       } catch (error) {
-        console.error("Error fetching Authors with Books", error);
-        throw new Error("Failed to fetch authors with books");
+        console.error("Error fetching authors:", error);
+        throw new Error("Failed to fetch author with books");
+      }
+    },
+    getBooksWithAuthor : async(_:unknown,{bid} : {bid : number}) : Promise<Book | string>  => { 
+      try {
+        const booksWithAuthor = await AppDataSource.getRepository(Book).find({
+          where:{
+            bid:bid
+          },
+          relations:{
+            author:true
+          }
+        })
+        console.log(booksWithAuthor);
+        return booksWithAuthor[0];
+      } catch (error) {
+        console.error("Error fetching authors:", error);
+        throw new Error("Failed to fetch author with books");
       }
     }
-  }
+  }   
 };

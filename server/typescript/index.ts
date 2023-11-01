@@ -21,6 +21,7 @@ AppDataSource.initialize()
 
 app.register(authorRouter, { prefix: "/author" });
 app.register(bookRouter, { prefix: "/book" });
+
 app.register(mercurius, {
   schema,
   resolvers,

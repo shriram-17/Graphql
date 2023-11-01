@@ -9,5 +9,10 @@ export const BookSchema = z.object({
     authorId : z.number()
 });
 
+export type  GetAuthorWithBooksArgs =
+{
+    id: number;
+};
+
 export type AuthorType = z.infer<typeof AuthorSchema>
 export type BookType = z.infer<typeof BookSchema>
